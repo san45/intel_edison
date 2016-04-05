@@ -1,0 +1,152 @@
+<!doctype html>
+<html>
+  <head>
+    <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+    
+    <script src='http://momentjs.com/downloads/moment.min.js'></script>
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  </head>
+  <script>
+   var  myFirebaseRef = new Firebase("https://bc-ef-f0-c5.firebaseio.com/");
+   var timeref = myFirebaseRef.child('/time')
+   
+  $(document).ready(function(){
+    $(".but").click(function(){
+       // alert("The paragraph was clicked.");
+        
+        timeref.once("value",function(snapshot){
+           // console.log(snapshot.val())
+          snapshot.forEach(function(childSnapshot){
+              //
+              var html= '<li class="list-group-item contact">';
+              html+= '<div>';
+              html+= '<p class="lead">'+'Time : '+childSnapshot.key()+'</p>';
+
+              
+             // console.log(childSnapshot.key(),":",childSnapshot.val())
+              childSnapshot.forEach(function(superchildsnap){
+                  //
+                   html+='<center>'
+                   html+='<p>'+superchildsnap.key()+'  ------>  '+superchildsnap.val()+'</p>';
+                   html+='</center>'
+                   
+                 //console.log(superchildsnap.key(),"::",superchildsnap.val())
+              });
+              html+='</div>'
+              html+='</li>'
+              document
+                 .querySelector('#view_profile')
+                 .innerHTML += html ; 
+          });
+        });
+     });
+    $(".fut").click(function(){
+       $("#edit_profile").show();
+    });
+    $("#hide").click(function(){
+        console.log($("#tim").val())
+        console.log($("#sena").val())
+        console.log($("#senb").val())
+        console.log($("#senc").val())
+        var x=$("#tim").val();
+        var a=$("#sena").val()
+        var b=$("#senb").val()
+        var c=$("#senc").val()
+        console.log(x)
+        //timeref.set({
+          // $("#tim").val() : "None"
+        //});
+        var time={};
+        time[x]={"sensor_a":a,
+                  "sensor_b":b,
+                    "sensor_c":c}
+        timeref.update(time);
+        //timeref.child().update({"sensor_a":})
+
+        
+        location.reload();
+        $("#edit_profile").hide();
+
+    });
+
+  });
+
+
+   //myFirebaseRef.child("time/6:00/sensor_b").on("value", function(snapshot) {
+   //var sensor_b = snapshot.val()
+  // $('.a').html(snapshot.val())
+
+   
+  </script>
+  <body>
+    <hr>
+    <div>
+      <center>
+    <button class="but">view profile</button>
+    <button class="fut">edit profile</button>
+      </center>
+  </div>
+  <hr>
+
+    <div class="col-md-6">
+        <ul id="view_profile" class="list-group">
+      
+      
+        </ul>
+    </div>
+    <div id="edit_profile" class="col-md-6">
+         <ul  class="list-group">
+          <p class="lead" ><b>Control your devices</b></p> 
+          <form>
+            <b>Time</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <select id="tim">
+  <option value="1:00">1:00</option>
+  <option value="2:00">2:00</option>
+  <option value="3:00">3:00</option>
+  <option value="4:00">4:00</option>
+  <option value="5:00">5:00</option>
+  <option value="6:00">6:00</option>
+  <option value="7:00">7:00</option>
+  <option value="8:00">8:00</option>
+  <option value="9:00">9:00</option>
+  <option value="10:00">10:00</option>
+  <option value="11:00">11:00</option>
+  <option value="12:00">12:00</option>
+  
+  <option value="13:00">13:00</option>
+  <option value="14:00">14:00</option>
+  <option value="15:00">15:00</option>
+  <option value="16:00">16:00</option>
+  <option value="17:00">17:00</option>
+  <option value="18:00">18:00</option>
+  <option value="19:00">19:00</option>
+  <option value="20:00">20:00</option>
+  <option value="21:00">21:00</option>
+  <option value="22:00">22:00</option>
+  <option value="23:00">23:00</option>
+  <option value="24:00">00:00</option>
+
+  
+</select>
+            <br><br>
+            <b>Bedroom Light </b>( Sensor A )
+            <select id="sena"><option value=0>off</option>
+            <option value=1>on</option></select>
+            <br><br>
+            <b>Geaser Turn-on Time </b> ( Sensor B )
+              <select id="senb"><option value=0>off</option>
+            <option value=1>on</option></select>
+            <br><br>
+           <b>Mosquito coil</b> ( Sensor C )
+              <select id="senc"><option value=0>off</option>
+            <option value=1>on</option></select>
+          </form>
+          <center><button id="hide">Submit</button> </center>  
+         </form>
+        </ul>
+    </div>
+
+  
+  </body>
+</html>
